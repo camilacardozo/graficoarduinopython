@@ -28,7 +28,7 @@ while True:
     time.append(tempo)
     celsius.append(temp)
     x=x+1
-    if (x<=5):
+    if (x<=20):
         drawnow(makeFig)
     else:
         plt.show(makeFig)

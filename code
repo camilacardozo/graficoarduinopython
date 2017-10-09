@@ -3,18 +3,22 @@ import numpy
 import matplotlib.pyplot as plt
 from drawnow import*
 
-time = []
-celsius = []
+x = []
+y = []
+dados=[]
 arduinoData = serial.Serial('COM3', 9600)
 plt.ion()
 x=0
-
+i=input("Nº de pontos plotados:")  
 def makeFig():
-    plt.plot([time], [celsius], 'ro-')
+    plt.plot(x, y, 'ro-')
     plt.title('T(t)')
     plt.grid(True)
-    plt.ylabel('Temperatura (Celsius)')
-    plt.xlabel('Tempo (milissegundos)')
+    plt.grid('r', linestyle='--', linewidth=1)
+    plt.ylim(0)  
+    plt.xlim(0) 
+    plt.ylabel('Temperatura (oC)')
+    plt.xlabel('Tempo (ms)')
          
     
 while True:
@@ -23,12 +27,15 @@ while True:
     arduinoString = arduinoData.readline()
     print arduinoString
     dataArray = arduinoString.split(',')
-    tempo = float (dataArray[0])
-    temp = float (dataArray[1])
-    time.append(tempo)
-    celsius.append(temp)
+    tempo= float (dataArray[0])
+    temperatura = float (dataArray[1])
+    x.append(tempo)
+    y.append(temperatura)
+    dados.append(arduinoString)
+	df = pd.DataFrame(dados)
+	df.to_excel('TESTE.xlsx', 'Sheet1', index=False)
     x=x+1
-    if (x<=20):
+    if (x<=i):
         drawnow(makeFig)
     else:
         plt.show(makeFig)
